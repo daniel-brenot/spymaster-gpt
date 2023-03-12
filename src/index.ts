@@ -5,9 +5,6 @@ import { Spymaster } from './spymaster';
 import environment from './environment';
 import {program} from 'commander';
 
-const OPENAI_KEY = "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";
-
-
 (()=>{
     let roomCode = process.argv[2];
     spymaster(roomCode, "not-a-robot-red", "red");
