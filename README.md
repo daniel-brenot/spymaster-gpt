@@ -3,6 +3,16 @@
 This project is a naive attempt I threw together to create an automated spymaster for the game
 codenames.
 
+## Intended improvements
+
+ - [ ] Configure spymasters names via CLI
+ - [ ] Configure room name via cli arg
+ - [ ] Make code more resilient to off timings
+ - [ ] Prevent the AI from cheating
+ - [ ] Create a GIF showing the guesses and hints over the course of the game
+ - [ ] Get requests to return consistently formatted clues
+
+
 ## Issues
 The replies from ChatGPT are not very good. The numbers have nothing to do with the number of clues
 that the hint applies to, so the hints are just bad. This could be fixed with a better
