@@ -4,19 +4,19 @@ This project is a naive attempt I threw together to create an automated spymaste
 codenames.
 
 ## Issues
-It is very difficult to get chatgpt to consistently reply in the same format, so getting
-the clue word along with a hint is not simple.
+The replies from ChatGPT are not very good. The numbers have nothing to do with the number of clues
+that the hint applies to, so the hints are just bad. This could be fixed with a better
+prompt, so getting this to a point where the spymaster gives good hints is relatively trivial now.
 
-A solution could be a better prompt that gets chatgpt to consistently format the answer the same way
-every time, but I haven't found a prompt that will consistently work. If you do, please share!
+It will also hang sometimes while waiting to see if the next round or game over has triggered.
+I'm not sure why yet, but I'm sure this can be fixed by adding a timeout and retrying manually
+rather than relying on the mechanism offered by puppeteer.
 
-Other than that yes, this will fail sometimes if the page doesn't respond quickly or if
-animations don't load at the expected speed. I intend to improve this, but so far I have only spent
-half a day on this project, so this is where it's at.
+If it hangs, feel free to close it and just rerun the program. It will rejoin the room as a new spymaster, but with the same spymaster name.
 
 ## Prerequisites
 Have node.js installed and run `npm install` in this directory.
-You also need to have an openai api key set to the environment variable ``
+You also need to have an openai api key set to the environment variable `OPENAI_API_KEY`
 
 ## Setup
 Go to the codenames site(https://codenames.game/) and create a new room.
@@ -25,4 +25,4 @@ Paste the room name into the string for roomCode in the source code.
 
 Run the command `npm run-script build` to create the spymasters that will now run for both sides.
 
-Now you should be able to run `npm run-script run` to spin up a spymaster for both sides.
+Now you should be able to run `npm run-script run <room-name>` to spin up a spymaster for both sides.
