@@ -6,11 +6,11 @@ codenames.
 ## Intended improvements
 
  - [ ] Configure spymasters names via CLI
- - [ ] Configure room name via cli arg
- - [ ] Make code more resilient to off timings
+ - [x] Configure room name via cli arg
+ - [x] Make code more resilient to off timings
  - [ ] Prevent the AI from cheating
  - [ ] Create a GIF showing the guesses and hints over the course of the game
- - [ ] Get requests to return consistently formatted clues
+ - [x] Get requests to return consistently formatted clues
 
 
 ## Issues
