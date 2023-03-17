@@ -140,7 +140,7 @@ export class CodenamesGamePage {
             log(this.side, "Found operatives guessing text.");
 
         } catch(err) {
-            log(this.side, "ERROR giving clue.")
+            log(this.side, `ERROR giving clue. ${err}`);
             throw err;
         }
     }

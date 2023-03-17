@@ -1,17 +1,30 @@
 // This file contains the actual interactions with chatgpt
 
-import type { ChatGPTAPI } from "chatgpt";
+import { OpenAIApi } from "openai";
 import { log } from "./logging";
 import { CardStatus, Team } from "./types";
 
 export class Spymaster {
 
-    constructor(private api: ChatGPTAPI, private side: Team) {}
+    constructor(private api: OpenAIApi, private side: Team) {}
 
     async getClue(cards: CardStatus) {
         let prompt = this.getPromptForCards(cards);
         let response = await this.getResponseForPrompt(prompt);
         return this.getClueFromResponse(response);
+    }
+
+    getSystemPrompt() {
+        const SYSTEM_MESSAGE = `You are the spymaster for the ${this.side} team in a game called Codenames.
+Codenames is a game for two teams, a red team and a blue team.
+One player from each team is the Spymaster, and only Spymasters see which words belong to which team.
+As a spymaster you will need to provide clue words that are not on any of the cards that exist on the board.
+Your clue should be only one word and describe cards for your team while avoiding cards that are the color of the other team or black.
+The clue number says how many cards the clue that was given describes.
+You will *always* respond with the format of "clue number".
+Clue example: "MELODY 3".
+`;
+        return SYSTEM_MESSAGE;
     }
 
     /** Gets the prompt for chatgpt that will elicit the response needed to play the game */
@@ -21,26 +34,24 @@ export class Spymaster {
         let grayCardWords = cards.grayCards.map(c=>`"${c}"`).join(", ");
         let blackCardWord = `"${cards.blackCard}"`;
 
-        return `You are the spymaster in a game called Codenames.
-Codenames is a game for two teams.There is a list of 25 words.
-Some of them are secretly assigned to the Red Team, some to the Blue Team.
-One player from each team is the Spymaster, and only Spymasters see which words belong to which team.
-Spymasters take turns giving clues to their teammates (Operatives), trying to lead them to guessing their team's words.
-The team that guesses all their words first wins the game.
-You are the spymaster for ${this.side} team and you are only allowed to respond one word at a time with the format of "word number" example:"MELODY 5".
-Here's the state of the board:
-
-The red cards: ${redCardWords} The blue cards: ${blueCardWords} The gray cards: ${grayCardWords} The black card: ${blackCardWord}
-
-Its your turn now.
-You don't need to explain the reasons of your choice just write the word followed by the number.
-What word and number do you say?`
+        return `The red cards: ${redCardWords}
+The blue cards: ${blueCardWords}
+The gray cards: ${grayCardWords}
+The black card: ${blackCardWord}
+What clue do you have for your operatives?`
     }
 
     async getResponseForPrompt(message: string) {
-        let response = (await this.api.sendMessage(message)).text;
-        log(this.side, `Response: ${response}`);
-        return response;
+        let response = await this.api.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            messages: [
+                { role: "system", content: this.getSystemPrompt() },
+                { role: "user", content: message}
+            ]
+        });
+        let outMessage = response.data.choices[0].message?.content!;
+        log(this.side, `Response: ${outMessage}`);
+        return outMessage;
     }
 
     /** Extracts the clue word and number from the response text from chatgpt */

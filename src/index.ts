@@ -2,10 +2,9 @@ import puppeteer, { Page } from 'puppeteer';
 import { log } from './logging';
 import { CodenamesGamePage } from './page-interactions';
 import { Spymaster } from './spymaster';
-import environment from './environment';
-import {program} from 'commander';
+import { Configuration, OpenAIApi } from 'openai';
 
-const OPENAI_KEY = "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";
+const OPENAI_KEY = "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";
 
 
 (()=>{
@@ -16,10 +15,8 @@ const OPENAI_KEY = "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";
 
 
 async function spymaster(roomCode: string, spymasterNickname: string, side: "red" | "blue") {
-    const { ChatGPTAPI } = await import('chatgpt');
-    const api = new ChatGPTAPI({
-        apiKey: environment.OPENAI_API_KEY
-    });
+    const configuration = new Configuration({ apiKey: OPENAI_KEY,});
+    const api = new OpenAIApi(configuration);
     let spymaster = new Spymaster(api, side);
     const browser = await puppeteer.launch({headless: false});
     const page = await browser.newPage();
