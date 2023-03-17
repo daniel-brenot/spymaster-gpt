@@ -3,10 +3,7 @@ import { log } from './logging';
 import { CodenamesGamePage } from './page-interactions';
 import { Spymaster } from './spymaster';
 import { Configuration, OpenAIApi } from 'openai';
-
-const OPENAI_KEY = "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";
-
-
+import env from "./environment";
 (()=>{
     let roomCode = process.argv[2];
     spymaster(roomCode, "not-a-robot-red", "red");
@@ -15,7 +12,7 @@ const OPENAI_KEY = "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";
 
 
 async function spymaster(roomCode: string, spymasterNickname: string, side: "red" | "blue") {
-    const configuration = new Configuration({ apiKey: OPENAI_KEY,});
+    const configuration = new Configuration({ apiKey: env.OPENAI_API_KEY });
     const api = new OpenAIApi(configuration);
     let spymaster = new Spymaster(api, side);
     const browser = await puppeteer.launch({headless: false});
